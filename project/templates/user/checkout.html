@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Fusion Mart &mdash; Login User</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/icomoon/style.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/aos.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style type="text/css">
+      input[type=number]::-webkit-inner-spin-button {
+          opacity: 1
+      }
+    </style>
+  </head>
+  <body>
+
+  <div class="site-wrap">
+
+
+    <div class="site-navbar bg-white py-2">
+
+      <div class="search-wrap">
+        <div class="container">
+          <a href="#" class="search-close js-search-close"><span class="icon-close2"></span></a>
+          <form action="#" method="post">
+            <input type="text" class="form-control" placeholder="Search keyword and hit enter...">
+          </form>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="logo">
+            <div class="site-logo">
+              <a href="{{ url_for('app.index') }}" class="js-logo-clone">Fusion Mart</a>
+            </div>
+          </div>
+          <div class="main-nav d-none d-lg-block">
+            <nav class="site-navigation text-right text-md-center" role="navigation">
+              <ul class="site-menu js-clone-nav d-none d-lg-block">
+                <li class="active"><a href="{{ url_for('app.index') }}">Home</a></li>
+
+                <li class="">
+                  <a href="{{ url_for('app.items_filter') }}">Items</a>
+                </li>
+                {% if(user.is_authenticated) %}
+                <li class="">
+                  <a href="{{ url_for('app.my_orders') }}">My Orders</a>
+                </li>
+                {% if(user.isUser) %}<li class="">
+                  <a href="{{ url_for('app.profile') }}">My Profile</a>
+                </li> {% endif %}
+                {% else %}
+                <li class=""><a href="contact.html">Contact</a></li>
+                <li class="has-children active">
+                  <a href="#">Login as</a>
+                  <ul class="dropdown">
+                    <li><a href="{{ url_for('auth.login') }}">User</a></li>
+                    <li><a href="{{ url_for('auth.login') }}">Admin</a></li>
+                  </ul>
+                </li>
+                {% endif %}
+              </ul>
+            </nav>
+          </div>
+
+          <div class="icons">
+            <a href="#" class="icons-btn d-inline-block js-search-open"><span class="icon-search"></span></a>
+            {% if(user.is_authenticated) %}
+              <a href="{{ url_for('app.cart') }}" class="icons-btn d-inline-block bag">
+                <span class="icon-shopping-cart"></span>
+                <span class="number">{{ cart_items }}</span>
+              </a>
+              <a href="{{ url_for('auth.logout') }}" class="icons-btn d-inline-block sign-out">
+                <span class="icon-sign-out"></span>
+              </a>
+            {% endif %}
+            <a href="{{ url_for('auth.logout') }}" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span class="icon-menu"></span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="custom-border-bottom py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0">Home</div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="site-section">
+      <div class="container">
+        <div class="row mb-5" style="display: none;">
+          <div class="col-md-12">
+            <div class="border p-4 rounded" role="alert">
+              Returning customer? <a href="#">Click here</a> to login
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-5 mb-md-0">
+            <h2 class="h3 mb-3 text-black">Personal Details</h2>
+            <div class="p-3 p-lg-5 border">
+              <div class="form-group">
+                  <label for="u_email" class="text-black">Email Address <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="u_email" name="u_email" value="{{ user.email }}" required>
+              </div>
+              <div class="form-group row">
+                <div class="col-md-6">
+                  <label for="u_fname" class="text-black">First Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="u_fname" name="u_fname" value="{{ user.first_name }}" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="u_lname" class="text-black">Last Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="u_lname" name="u_lname" value="{{ user.last_name }}" required>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <label for="u_address" class="text-black">Address <span class="text-danger">*</span></label>
+                  <input type="hidden" {% if(address | length != 0) %}value="{{ addresses[0].id }}"{% else %}value="9999"{% endif %} id="u_aadr_id" name="u_addr_id" />
+                  <input type="text" class="form-control" id="u_address" name="u_address" placeholder="Street address" {% if(address | length != 0) %}value="{{ addresses[0].street }}"{% endif %} required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Apartment, suite, unit etc. (optional)" {% if(address | length != 0) %}value="{{ addresses[0].street1 }}"{% endif %} id="u_address1" name="u_address1"/>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-6">
+                  <label for="u_state" class="text-black">State <span class="text-danger">*</span></label>
+                  <select id="u_state" name="u_state" class="form-control" required>
+                    <option value="1">Select a state</option>
+                    <option value="Alabama" {% if(address | length != 0) %}{% if(addresses[0].state=='Alabama') %}  selected="selected" {% endif %}{% endif %}>Alabama</option>
+                    <option value="Alaska" {% if(address | length != 0) %}{% if(addresses[0].state=='Alaska') %}  selected="selected" {% endif %}{% endif %}>Alaska</option>
+                    <option value="Arizona"  {% if(address | length != 0) %}{% if(addresses[0].state=='Arizona') %}  selected="selected" {% endif %}{% endif %}>Arizona</option>
+                    <option value="Arkansas"  {% if(address | length != 0) %}{% if(addresses[0].state=='Arkansas') %}  selected="selected" {% endif %}{% endif %}>Arkansas</option>
+                    <option value="California"  {% if(address | length != 0) %}{% if(addresses[0].state=='California') %}  selected="selected" {% endif %}{% endif %}>California</option>
+                    <option value="Colorado"  {% if(address | length != 0) %}{% if(addresses[0].state=='Colorado') %}  selected="selected" {% endif %}{% endif %}>Colorado</option>
+                    <option value="Connecticut"  {% if(address | length != 0) %}{% if(addresses[0].state=='Connecticut') %}  selected="selected" {% endif %}{% endif %}>Connecticut</option>
+                    <option value="Delaware"  {% if(address | length != 0) %}{% if(addresses[0].state=='Delaware') %}  selected="selected" {% endif %}{% endif %}>Delaware</option>
+                    <option value="Florida"  {% if(address | length != 0) %}{% if(addresses[0].state=='Florida') %}  selected="selected" {% endif %}{% endif %}>Florida</option>
+                    <option value="Georgia"  {% if(address | length != 0) %}{% if(addresses[0].state=='Georgia') %}  selected="selected" {% endif %}{% endif %}>Georgia</option>
+                    <option value="Hawaii"  {% if(address | length != 0) %}{% if(addresses[0].state=='Hawaii') %}  selected="selected" {% endif %}{% endif %}>Hawaii</option>
+                    <option value="Idaho"  {% if(address | length != 0) %}{% if(addresses[0].state=='Idaho') %}  selected="selected" {% endif %}{% endif %}>Idaho</option>
+                    <option value="Illinois"  {% if(address | length != 0) %}{% if(addresses[0].state=='Illinois') %}  selected="selected" {% endif %}{% endif %}>Illinois</option>
+                    <option value="Indiana"  {% if(address | length != 0) %}{% if(addresses[0].state=='Indiana') %}  selected="selected" {% endif %}{% endif %}>Indiana</option>
+                    <option value="Iowa"  {% if(address | length != 0) %}{% if(addresses[0].state=='Iowa') %}  selected="selected" {% endif %}{% endif %}>Iowa</option>
+                    <option value="Kansas"  {% if(address | length != 0) %}{% if(addresses[0].state=='Kansas') %}  selected="selected" {% endif %}{% endif %}>Kansas</option>
+                    <option value="Kentucky"  {% if(address | length != 0) %}{% if(addresses[0].state=='Kentucky') %}  selected="selected" {% endif %}{% endif %}>Kentucky</option>
+                    <option value="Louisiana"  {% if(address | length != 0) %}{% if(addresses[0].state=='Louisiana') %}  selected="selected" {% endif %}{% endif %}>Louisiana</option>
+                    <option value="Maine"  {% if(address | length != 0) %}{% if(addresses[0].state=='Maine') %}  selected="selected" {% endif %}{% endif %}>Maine</option>
+                    <option value="Maryland"  {% if(address | length != 0) %}{% if(addresses[0].state=='Maryland') %}  selected="selected" {% endif %}{% endif %}>Maryland</option>
+                    <option value="Massachusetts"  {% if(address | length != 0) %}{% if(addresses[0].state=='Massachusetts') %}  selected="selected" {% endif %}{% endif %}>Massachusetts</option>
+                    <option value="Michigan"  {% if(address | length != 0) %}{% if(addresses[0].state=='Michigan') %}  selected="selected" {% endif %}{% endif %}>Michigan</option>
+                    <option value="Minnesota"  {% if(address | length != 0) %}{% if(addresses[0].state=='Minnesota') %}  selected="selected" {% endif %}{% endif %}>Minnesota</option>
+                    <option value="Mississippi"  {% if(address | length != 0) %}{% if(addresses[0].state=='Mississippi') %}  selected="selected" {% endif %}{% endif %}>Mississippi</option>
+                    <option value="Missouri"  {% if(address | length != 0) %}{% if(addresses[0].state=='Missouri') %}  selected="selected" {% endif %}{% endif %}>Missouri</option>
+                    <option value="Montana"  {% if(address | length != 0) %}{% if(addresses[0].state=='Montana') %}  selected="selected" {% endif %}{% endif %}>Montana</option>
+                    <option value="Nebraska"  {% if(address | length != 0) %}{% if(addresses[0].state=='Nebraska') %}  selected="selected" {% endif %}{% endif %}>Nebraska</option>
+                    <option value="Nevada" {% if(address | length != 0) %}{% if(addresses[0].state=='Nevada') %}  selected="selected" {% endif %}{% endif %}>Nevada</option>
+                    <option value="New_Hampshire" {% if(address | length != 0) %}{% if(addresses[0].state=='New_Hampshire') %}  selected="selected" {% endif %}{% endif %}>New Hampshire</option>
+                    <option value="New_Jersey" {% if(address | length != 0) %}{% if(addresses[0].state=='New_Jersey') %}  selected="selected" {% endif %}{% endif %}>New Jersey</option>
+                    <option value="New_Mexico" {% if(address | length != 0) %}{% if(addresses[0].state=='New_Mexico') %}  selected="selected" {% endif %}{% endif %}>New Mexico</option>
+                    <option value="New_York" {% if(address | length != 0) %}{% if(addresses[0].state=='New_York') %}  selected="selected" {% endif %}{% endif %}>New York</option>
+                    <option value="North_Carolina" {% if(address | length != 0) %}{% if(addresses[0].state=='North_Carolina') %}  selected="selected" {% endif %}{% endif %}>North Carolina</option>
+                    <option value="North_Dakota" {% if(address | length != 0) %}{% if(addresses[0].state=='North_Dakota') %}  selected="selected" {% endif %}{% endif %}>North Dakota</option>
+                    <option value="Ohio" {% if(address | length != 0) %}{% if(addresses[0].state=='Ohio') %}  selected="selected" {% endif %}{% endif %}>Ohio</option>
+                    <option value="Oklahoma" {% if(address | length != 0) %}{% if(addresses[0].state=='Oklahoma') %}  selected="selected" {% endif %}{% endif %}>Oklahoma</option>
+                    <option value="Oregon" {% if(address | length != 0) %}{% if(addresses[0].state=='Oregon') %}  selected="selected" {% endif %}{% endif %}>Oregon</option>
+                    <option value="Pennsylvania" {% if(address | length != 0) %}{% if(addresses[0].state=='Pennsylvania') %}  selected="selected" {% endif %}{% endif %}>Pennsylvania</option>
+                    <option value="Rhode_Island" {% if(address | length != 0) %}{% if(addresses[0].state=='Rhode_Island') %}  selected="selected" {% endif %}{% endif %}>Rhode Island</option>
+                    <option value="South_Carolina" {% if(address | length != 0) %}{% if(addresses[0].state=='South_Carolina') %}  selected="selected" {% endif %}{% endif %}>South Carolina</option>
+                    <option value="South_Dakota" {% if(address | length != 0) %}{% if(addresses[0].state=='South_Dakota') %}  selected="selected" {% endif %}{% endif %}>South Dakota</option>
+                    <option value="Tennessee" {% if(address | length != 0) %}{% if(addresses[0].state=='Tennessee') %}  selected="selected" {% endif %}{% endif %}>Tennessee</option>
+                    <option value="Texas" {% if(address | length != 0) %}{% if(addresses[0].state=='Texas') %}  selected="selected" {% endif %}{% endif %}>Texas</option>
+                    <option value="Utah" {% if(address | length != 0) %}{% if(addresses[0].state=='Utah') %}  selected="selected" {% endif %}{% endif %}>Utah</option>
+                    <option value="Vermont" {% if(address | length != 0) %}{% if(addresses[0].state=='Vermont') %}  selected="selected" {% endif %}{% endif %}>Vermont</option>
+                    <option value="Virginia" {% if(address | length != 0) %}{% if(addresses[0].state=='Virginia') %}  selected="selected" {% endif %}{% endif %}>Virginia</option>
+                    <option value="Washington" {% if(address | length != 0) %}{% if(addresses[0].state=='Washington') %}  selected="selected" {% endif %}{% endif %}>Washington</option>
+                    <option value="West_Virginia" {% if(address | length != 0) %}{% if(addresses[0].state=='Louisiana') %}  selected="selected" {% endif %}{% endif %}>West Virginia</option>
+                    <option value="Wisconsin" {% if(address | length != 0) %}{% if(addresses[0].state=='Wisconsin') %}  selected="selected" {% endif %}{% endif %}>Wisconsin</option>
+                    <option value="Wyoming" {% if(address | length != 0) %}{% if(addresses[0].state=='Wyoming') %}  selected="selected" {% endif %}{% endif %}>Wyoming</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="u_zip" class="text-black">Postal / Zip Code <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="u_zip" name="u_zip" value=" {% if(address | length != 0) %}{{ addresses[0].postal }}{% endif %}" required>
+                </div>
+              </div>
+
+              <div class="form-group row mb-5">
+                <div class="col-md-6">
+                  <label for="u_country" class="text-black">Country <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="u_country" name="u_country" placeholder="Country" value="USA" disabled required>
+                </div>
+                <div class="col-md-6">
+                  <label for="u_phone" class="text-black">Phone <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="u_phone" name="u_phone" placeholder="Phone Number" value=" {% if(address | length != 0) %}{{ addresses[0].mobile }}{% endif %}" required>
+                </div>
+              </div>
+
+
+
+              <div class="form-group">
+                <label for="c_ship_different_address" class="text-black" data-toggle="collapse" href="#ship_different_address" role="button" aria-expanded="false" aria-controls="ship_different_address"><input type="checkbox" value="1" id="c_ship_different_address" {% if(not user.isUser) %}disabled{% endif %}> Ship To A Different Address?</label>
+                <div class="collapse" id="ship_different_address">
+                  <div class="py-2">
+
+                    <div class="form-group">
+                      <label for="c_diff_country" class="text-black">Address <span class="text-danger">*</span></label>
+                      <select id="c_diff_country" class="form-control">
+                        {% for address in addresses %}
+                          <option value="{{ address.id }}"><pre>{{ address.street }}, {{ address.street1 }}, {{ address.state }}, {{ address.country }} - {{ address.postal }}</pre></option>
+                        {% endfor %}
+                      </select>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="u_notes" class="text-black">Order Notes</label>
+                <textarea name="u_notes" id="u_notes" cols="30" rows="3" class="form-control" placeholder="Write your notes here..."></textarea>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="col-md-6">
+
+            <div class="row mb-5">
+              <div class="col-md-12">
+                <h2 class="h3 mb-3 text-black">Coupon Code</h2>
+                <div class="p-3 p-lg-5 border">
+
+                  <label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
+                  <div class="input-group w-75">
+                    <input type="text" class="form-control" id="c_code" placeholder="Coupon Code" aria-label="Coupon Code" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary btn-sm px-4" type="button" id="button-addon2" onclick="verifyCoupon(document.getElementById('c_code').value)">Apply</button>
+                    </div>
+                    <input type="hidden" id="u_coupon" name="u_coupon" value="9999"/>
+                  </div>
+                  <div class="input-group w-75">
+                    <b style="display: none;" id="coupon_res"></b>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-5">
+              <div class="col-md-12">
+                <h2 class="h3 mb-3 text-black">Your Order</h2>
+                <div class="p-3 p-lg-5 border">
+                  <table class="table site-block-order-table mb-5">
+                    <thead>
+                      <th>Product</th>
+                      <th>Total</th>
+                    </thead>
+                    {% set total = [] %}
+                    <tbody>
+                      {% for cartItem in cart_response %}
+                        {% set dummy = total.append(cart_response[cartItem].total_price) %}
+                        <tr>
+                          <td>{{ cartItem[0].name }} <strong class="mx-2">x</strong> {{ cart_response[cartItem].quantity }}</td>
+                          <td>$ {{ cart_response[cartItem].total_price }}</td>
+                        </tr>
+                      {% endfor %}
+                        <tr>
+                          <td>Total</td>
+                          <td>$ {{ total | sum }}</td>
+                          <input type="hidden" value="{{ total | sum }}" id="ttl_price" />
+                        </tr>
+                        <tr>
+                          <td>Promocode</td>
+                          <td>$ <span id="promo_discount">{{ 0 }}</span></td>
+                        </tr>
+                        <tr>
+                          <td>Delivery Charges</td>
+                          <input type="hidden" id="str_pckp" value="{{ is_store_pickup }}" />
+                          <td>$ <span id="delivery_charges">{% if(is_store_pickup) %}0{% else %}200{% endif %}</span></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                          <td><b>Grand Total</b></td>
+                          {% if(is_store_pickup) %}
+                            {% set charges = 0 %}
+                          {% else %}
+                            {% set charges = 200 %}
+                          {% endif %}
+                          <td><b>$ <span id="grand_total">{{ total | sum + charges }}</span></b></td>
+                        </tr>
+                    </tfoot>
+                  </table>
+
+                  <div class="border p-3 mb-3">
+                    <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsebank" role="button" aria-expanded="false" aria-controls="collapsebank" align="center">Credit Card</a></h3>
+
+                    <div class="collapse" id="collapsebank">
+                      <div class="py-2">
+
+                        <div class="form-group row">
+                          <div class="col-md-12">
+                            <input type="hidden" id="card_id" name="card_id" value="{{ card.id }}">
+                            <label for="u_ccno" class="text-black">Card No. <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="u_ccno" name="u_ccno" placeholder="Credit card No." value="{{ card.number }}" required maxlength="16" minlength="16">
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <div class="col-md-8">
+                            <label for="u_cval" class="text-black">Valid Till. <span class="text-danger">*</span></label>
+                            {% set val = card.validity | string() %}
+                            <input type="month" class="form-control" id="u_cval" name="u_cval" placeholder="Phone Number" value="{{  val.split('-')[:2] | join('-') }}" required>
+                          </div>
+
+                          <div class="col-md-4">
+                            <label for="u_cccvv" class="text-black">CVV. <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control" id="u_cccvv" name="u_cccvv" placeholder="CVV" value="{{ card.cvv }}" required minlength="3" maxlength="4">
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <button class="btn btn-primary btn-lg btn-block" onclick="placeOrder();">Place Order</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        <!-- </form> -->
+      </div>
+    </div>
+
+    <footer class="site-footer custom-border-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+            <h3 class="footer-heading mb-4">Promo</h3>
+            <a href="#" class="block-6">
+              <img src="{{ url_for('static', filename='images/about_1.jpg') }}" alt="Image placeholder" class="img-fluid rounded mb-4">
+              <h3 class="font-weight-light  mb-0">Finding Your Perfect Products This Season</h3>
+            </a>
+          </div>
+          <div class="col-lg-5 ml-auto mb-5 mb-lg-0">
+            <div class="row">
+              <div class="col-md-12">
+                <h3 class="footer-heading mb-4">Quick Links</h3>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <ul class="list-unstyled">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="#">Items</a></li>
+                  {% if(user.is_authenticated) %}
+                  <li><a href="#">My Orders</a></li>
+                  {% else %}
+                  <li><a href="#">Login</a></li>
+                  {% endif %}
+                </ul>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <ul class="list-unstyled">
+                  {% if(user.is_authenticated) %}
+                  <li><a href="#">My Orders</a></li>
+                  <li><a href="#">My Profile</a></li>
+                  <li><a href="#">Shopping Cart</a></li>
+                  {% else %}
+                  <li><a href="#">Register</a></li>
+                  <li><a href="#">Track Order</a></li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3">
+            <div class="block-5 mb-5">
+              <h3 class="footer-heading mb-4">Contact Info</h3>
+              <ul class="list-unstyled">
+                <li class="address">203 Fake St. Mountain View, San Francisco, California, USA</li>
+                <li class="phone"><a href="tel://23923929210">+2 392 3929 210</a></li>
+                <li class="email">customercare@fusionmart.com</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="row pt-5 mt-5 text-center">
+          <div class="col-md-12">
+            <p>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | <a href="http://localhost:5000/" target="_blank" class="text-primary">Fusion Mart</a>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+  <script type="text/javascript">
+    function verifyCoupon(code) {
+      $.post({
+        url: "/verifyCoupon/",
+        contentType: "application/json",
+        data: JSON.stringify({ code : code }),
+        success: function(response) {
+          console.log("Success:", response);
+          if(response["status"] == "true") {
+            document.getElementById("coupon_res").innerHTML = "Yay ! Coupon code got applied successfully 😍🥳";
+            document.getElementById("coupon_res").style.color = "green";
+            document.getElementById("u_coupon").value = response["id"];
+            document.getElementById("promo_discount").innerHTML = response["discount"];
+            document.getElementById("grand_total").innerHTML = parseFloat(parseFloat(document.getElementById("ttl_price").value) - parseFloat(response["discount"])) + parseFloat(document.getElementById("delivery_charges").innerHTML);
+          } else {
+            document.getElementById("coupon_res").innerHTML = "Invalid Coupon code !";
+            document.getElementById("coupon_res").style.color = "red";
+          }
+          document.getElementById("coupon_res").style.display = "block";
+        },
+        error: function(xhr, status, error) {
+          console.error("Error:", error);
+        }
+      });
+    }
+    function placeOrder() {
+      alert("Place Order !");
+      $.post({
+        url: "/place_order/",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "email" : $("#u_email").val(),
+            "fname" : $("#u_fname").val(),
+            "lname" : $("#u_lname").val(),
+            "address" : $("#u_address").val(),
+            "address1" : $("#u_address1").val(),
+            "state" : $("#u_state").val(),
+            "zip" : $("#u_zip").val(),
+            "country" : $("#u_country").val(),
+            "phone" : $("#u_phone").val(),
+            "notes" : $("#u_notes").val(),
+            "coupon_id" : $("#u_coupon").val(),
+            "ccno" : $("#u_ccno").val(),
+            "ccval" : $("#u_cval").val(),
+            "cccvv" : $("#u_cccvv").val(),
+            "store_pickup" : $("#str_pckp").val(),
+            "total" : document.getElementById("grand_total").innerHTML,
+            "addr_id" : $("#u_aadr_id").val(),
+            "cc_id" : $("#card_id").val()
+        }),
+        success: function(response) {
+          console.log("Success:", response);
+          if(response["status"] == "true") {
+            window.location.href = "/order_success/" + response["order_id"] + "/";
+          } else {
+            document.getElementById("coupon_res").innerHTML = "Invalid Coupon code !";
+            document.getElementById("coupon_res").style.color = "red";
+          }
+          document.getElementById("coupon_res").style.display = "block";
+        },
+        error: function(xhr, status, error) {
+          console.error("Error:", error);
+        }
+      });
+    }
+  </script>
+  <script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery.magnific-popup.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/aos.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+  </body>
+</html>

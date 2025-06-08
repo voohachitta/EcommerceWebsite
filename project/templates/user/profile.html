@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Fusion Mart &mdash; Login User</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/icomoon/style.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/aos.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style type="text/css">
+      input[type=number]::-webkit-inner-spin-button {
+          opacity: 1
+      }
+    </style>
+  </head>
+  <body>
+
+  <div class="site-wrap">
+
+
+    <div class="site-navbar bg-white py-2">
+
+      <div class="search-wrap">
+        <div class="container">
+          <a href="#" class="search-close js-search-close"><span class="icon-close2"></span></a>
+          <form action="#" method="post">
+            <input type="text" class="form-control" placeholder="Search keyword and hit enter...">
+          </form>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="logo">
+            <div class="site-logo">
+              <a href="{{ url_for('app.index') }}" class="js-logo-clone">Fusion Mart</a>
+            </div>
+          </div>
+          <div class="main-nav d-none d-lg-block">
+            <nav class="site-navigation text-right text-md-center" role="navigation">
+              <ul class="site-menu js-clone-nav d-none d-lg-block">
+                <li><a href="{{ url_for('app.index') }}">Home</a></li>
+
+                <li class="">
+                  <a href="{{ url_for('app.items_filter') }}">Items</a>
+                </li>
+                {% if(user.is_authenticated) %}
+                <li class="">
+                  <a href="{{ url_for('app.my_orders') }}">My Orders</a>
+                </li>
+                {% if(user.isUser) %}<li class="active">
+                  <a href="{{ url_for('app.profile') }}">My Profile</a>
+                </li> {% endif %}isUser
+                {% else %}
+                <li class=""><a href="contact.html">Contact</a></li>
+                <li class="has-children active">
+                  <a href="#">Login as</a>
+                  <ul class="dropdown">
+                    <li><a href="{{ url_for('auth.login') }}">User</a></li>
+                    <li><a href="{{ url_for('auth.login') }}">Admin</a></li>
+                  </ul>
+                </li>
+                {% endif %}
+              </ul>
+            </nav>
+          </div>
+
+          <div class="icons">
+            <a href="#" class="icons-btn d-inline-block js-search-open"><span class="icon-search"></span></a>
+            {% if(user.is_authenticated) %}
+              <a href="{{ url_for('app.cart') }}" class="icons-btn d-inline-block bag">
+                <span class="icon-shopping-cart"></span>
+                <span class="number">{{ cart_items }}</span>
+              </a>
+              <a href="{{ url_for('auth.logout') }}" class="icons-btn d-inline-block sign-out">
+                <span class="icon-sign-out"></span>
+              </a>
+            {% endif %}
+            <a href="{{ url_for('auth.logout') }}" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span class="icon-menu"></span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="custom-border-bottom py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0">Home</div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="site-section">
+      <div class="container">
+        <!-- <div class="row mb-5">
+          <div class="col-md-12">
+            <div class="border p-4 rounded" role="alert">
+              Returning customer? <a href="#">Click here</a> to login
+            </div>
+          </div>
+        </div> -->
+        <div class="row">
+          <div class="col-md-6 mb-5 mb-md-0">
+            <h2 class="h3 mb-3 text-black">Personal Details</h2>
+            <div class="p-3 p-lg-5 border">
+              <div class="form-group">
+                  <label for="c_email_address" class="text-black">Email Address <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="c_email_address" name="c_email_address" value="{{ user.email }}" disabled>
+              </div>
+              <div class="form-group row">
+                <div class="col-md-6">
+                  <label for="c_fname" class="text-black">First Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="c_fname" name="c_fname" value="{{ user.first_name }}" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label for="c_lname" class="text-black">Last Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="c_lname" name="c_lname" value="{{ user.last_name }}" disabled>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-12">
+                  <label for="c_address" class="text-black">Address <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="c_address" name="c_address" placeholder="Street address" value="{{ addresses[0].street }}" disabled>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Apartment, suite, unit etc. (optional)" value="{{ addresses[0].street1 }}" disabled>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-6">
+                  <label for="c_country" class="text-black">State <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" placeholder="Apartment, suite, unit etc. (optional)" value="{{ addresses[0].state }}" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label for="c_postal_zip" class="text-black">Postal / Zip Code <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="c_postal_zip" name="c_postal_zip" value="{{ addresses[0].postal }}" disabled>
+                </div>
+              </div>
+
+              <div class="form-group row mb-5">
+                <div class="col-md-6">
+                  <label for="c_state_country" class="text-black">Country <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="c_state_country" name="c_state_country" placeholder="Country" value="USA" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label for="c_phone" class="text-black">Phone <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="c_phone" name="c_phone" placeholder="Phone Number" value="{{ addresses[0].mobile }}" disabled>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-md-6">
+
+            <div class="row mb-5">
+              <div class="col-md-12">
+                <h2 class="h3 mb-3 text-black">&nbsp;</h2>
+                <div class="p-3 p-lg-5 border">
+
+                  <div class="border p-3 mb-3">
+                    <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsebank" role="button" aria-expanded="false" aria-controls="collapsebank" align="center">Credit Card</a></h3>
+
+                    <div class="collapse" id="collapsebank">
+                      <div class="py-2">
+
+                        <div class="form-group row">
+                          <div class="col-md-12">
+                            <label for="cc_no" class="text-black">Card No. <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control" id="cc_no" name="cc_no" placeholder="Credit card No." value="{{ card.number }}">
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <div class="col-md-8">
+                            <label for="cc_val" class="text-black">Valid Till. <span class="text-danger">*</span></label>
+                            {% set val = card.validity | string() %}
+                            <input type="month" class="form-control" id="cc_val" name="cc_val" placeholder="Phone Number" value="{{  val.split('-')[:2] | join('-') }}">
+                          </div>
+
+                          <div class="col-md-4">
+                            <label for="cc_cvv" class="text-black"> <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control" id="cc_cvv" name="cc_cvv" placeholder="CVV" value="{{ card.cvv }}">
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+
+                          <div class="col-md-8">
+                            <input type="submit" class="form-control" id="cc_add" name="cc_add" onclick="addCard();">
+                          </div>
+                          <div class="col-md-2"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="border p-3 mb-5">
+                    <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapsepaypal" role="button" aria-expanded="false" aria-controls="collapsepaypal" align="center">Add Address</a></h3>
+
+                    <div class="collapse" id="collapsepaypal">
+                      <div class="py-2">
+
+                        <div class="form-group row">
+                          <div class="col-md-12">
+                            <label for="a_addr_1" class="text-black">Address <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="a_addr_1" name="c_address" placeholder="Street address">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <input type="text" class="form-control" placeholder="Apartment, suite, unit etc. (optional)" id="a_addr_2">
+                        </div>
+
+                        <div class="form-group row">
+                          <div class="col-md-6">
+                            <label for="a_state" class="text-black">State <span class="text-danger">*</span></label>
+                            <select id="a_state" class="form-control">
+                              <option value="1">Select a state</option>
+                              <option value="Alabama">Alabama</option>
+                              <option value="Alaska">Alaska</option>
+                              <option value="Arizona">Arizona</option>
+                              <option value="Arkansas">Arkansas</option>
+                              <option value="California">California</option>
+                              <option value="Colorado">Colorado</option>
+                              <option value="Connecticut">Connecticut</option>
+                              <option value="Delaware">Delaware</option>
+                              <option value="Florida">Florida</option>
+                              <option value="Georgia">Georgia</option>
+                              <option value="Hawaii">Hawaii</option>
+                              <option value="Idaho">Idaho</option>
+                              <option value="Illinois">Illinois</option>
+                              <option value="Indiana">Indiana</option>
+                              <option value="Iowa">Iowa</option>
+                              <option value="Kansas">Kansas</option>
+                              <option value="Kentucky">Kentucky</option>
+                              <option value="Louisiana">Louisiana</option>
+                              <option value="Maine">Maine</option>
+                              <option value="Maryland">Maryland</option>
+                              <option value="Massachusetts">Massachusetts</option>
+                              <option value="Michigan">Michigan</option>
+                              <option value="Minnesota">Minnesota</option>
+                              <option value="Mississippi">Mississippi</option>
+                              <option value="Missouri">Missouri</option>
+                              <option value="Montana">Montana</option>
+                              <option value="Nebraska">Nebraska</option>
+                              <option value="Nevada">Nevada</option>
+                              <option value="New_Hampshire">New Hampshire</option>
+                              <option value="New_Jersey">New Jersey</option>
+                              <option value="New_Mexico">New Mexico</option>
+                              <option value="New_York">New York</option>
+                              <option value="North_Carolina">North Carolina</option>
+                              <option value="North_Dakota">North Dakota</option>
+                              <option value="Ohio">Ohio</option>
+                              <option value="Oklahoma">Oklahoma</option>
+                              <option value="Oregon">Oregon</option>
+                              <option value="Pennsylvania">Pennsylvania</option>
+                              <option value="Rhode_Island">Rhode Island</option>
+                              <option value="South_Carolina">South Carolina</option>
+                              <option value="South_Dakota">South Dakota</option>
+                              <option value="Tennessee">Tennessee</option>
+                              <option value="Texas">Texas</option>
+                              <option value="Utah">Utah</option>
+                              <option value="Vermont">Vermont</option>
+                              <option value="Virginia">Virginia</option>
+                              <option value="Washington">Washington</option>
+                              <option value="West_Virginia">West Virginia</option>
+                              <option value="Wisconsin">Wisconsin</option>
+                              <option value="Wyoming">Wyoming</option>
+                            </select>
+                          </div>
+                          <div class="col-md-6">
+                            <label for="a_zip" class="text-black">Postal / Zip Code <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="a_zip" name="c_postal_zip">
+                          </div>
+                        </div>
+
+                        <div class="form-group row mb-5">
+                          <div class="col-md-6">
+                            <label for="a_country" class="text-black">Country <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="a_country" name="c_state_country" placeholder="Country" value="USA" disabled>
+                          </div>
+                          <div class="col-md-6">
+                            <label for="a_phone" class="text-black">Phone <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="a_phone" name="c_phone" placeholder="Phone Number">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-md-12">
+                            <button class="btn btn-primary btn-lg btn-block" onclick="addAddress();">Add</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="border p-3 mb-5">
+                    <h3 class="h6 mb-0"><a class="d-block" data-toggle="collapse" href="#collapseaddress" role="button" aria-expanded="false" aria-controls="collapseaddress" align="center">My Address List</a></h3>
+
+                    <div class="collapse" id="collapseaddress">
+                      <div class="py-2">
+                        {% for address in addresses %}
+                          <div class="form-group row">
+                            <div class="col-1"></div>
+                            <div class="col-10">
+                              <table class="table table-bordered">
+                                <thead>
+                                <tr align="center"><th><strong>Address {{ loop.index }}</strong></th></tr>
+                                </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td><b>Address :</b> {{ address.street }}, {{ address.street1 }}</td>
+                                    </tr>
+                                    <tr>
+                                      <td><b>State :</b> {{ address.state }}</td>
+                                    </tr>
+                                    <tr>
+                                      <td><b>Country :</b> {{ address.country }}</td>
+                                    </tr>
+                                    <tr>
+                                      <td><b>Postal :</b> {{ address.postal }}</td>
+                                    </tr>
+                                    <tr>
+                                      <td><b>Mobile :</b> {{ address.mobile }}</td>
+                                    </tr>
+                                  </tbody>
+                              </table>
+                            </div>
+                          </div>
+                          </div>
+                        {% endfor %}
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- </form> -->
+      </div>
+    </div>
+
+    <footer class="site-footer custom-border-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+            <h3 class="footer-heading mb-4">Promo</h3>
+            <a href="#" class="block-6">
+              <img src="{{ url_for('static', filename='images/about_1.jpg') }}" alt="Image placeholder" class="img-fluid rounded mb-4">
+              <h3 class="font-weight-light  mb-0">Finding Your Perfect Products This Season</h3>
+            </a>
+          </div>
+          <div class="col-lg-5 ml-auto mb-5 mb-lg-0">
+            <div class="row">
+              <div class="col-md-12">
+                <h3 class="footer-heading mb-4">Quick Links</h3>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <ul class="list-unstyled">
+                  <li><a href="#">Home</a></li>
+                  <li><a href="#">Items</a></li>
+                  {% if(user.is_authenticated) %}
+                  <li><a href="#">My Orders</a></li>
+                  {% else %}
+                  <li><a href="#">Login</a></li>
+                  {% endif %}
+                </ul>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <ul class="list-unstyled">
+                  {% if(user.is_authenticated) %}
+                  <li><a href="#">My Orders</a></li>
+                  <li><a href="#">My Profile</a></li>
+                  <li><a href="#">Shopping Cart</a></li>
+                  {% else %}
+                  <li><a href="#">Register</a></li>
+                  <li><a href="#">Track Order</a></li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3">
+            <div class="block-5 mb-5">
+              <h3 class="footer-heading mb-4">Contact Info</h3>
+              <ul class="list-unstyled">
+                <li class="address">203 Fake St. Mountain View, San Francisco, California, USA</li>
+                <li class="phone"><a href="tel://23923929210">+2 392 3929 210</a></li>
+                <li class="email">customercare@fusionmart.com</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="row pt-5 mt-5 text-center">
+          <div class="col-md-12">
+            <p>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | <a href="http://localhost:5000/" target="_blank" class="text-primary">Fusion Mart</a>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+  <script type="text/javascript">
+    function verifyCoupon(code) {
+      $.post({
+        url: "/verifyCoupon/",
+        contentType: "application/json",
+        data: JSON.stringify({ code : code }),
+        success: function(response) {
+          console.log("Success:", response);
+          document.getElementById("coupon_res").innerHTML = response["status"];
+          document.getElementById("coupon_res").style.display = "block";
+          document.getElementById("coupon_res").style.color = "green";
+        },
+        error: function(xhr, status, error) {
+          console.error("Error:", error);
+        }
+      });
+    }
+
+    function addAddress() {
+      alert("Triggered !");
+      $.post({
+        url: "/add_address/",
+        contentType: "application/json",
+        data: JSON.stringify({ address1 : document.getElementById("a_addr_1").value, address2 : document.getElementById("a_addr_1").value, state : document.getElementById("a_state").value, postal : document.getElementById("a_zip").value, country : document.getElementById("a_country").value, phone : document.getElementById("a_phone").value}),
+        success: function(response) {
+          console.log("Success:", response);
+          window.location.reload();
+        },
+        error: function(xhr, status, error) {
+          console.error("Error:", error);
+        }
+      });
+    }
+
+    function addCard() {
+      alert("Triggered !");
+      $.post({
+        url: "/add_card/",
+        contentType: "application/json",
+        data: JSON.stringify({ num : document.getElementById("cc_no").value, validity : document.getElementById("cc_val").value, cvv : document.getElementById("cc_cvv").value}),
+        success: function(response) {
+          console.log("Success:", response);
+          window.location.reload();
+        },
+        error: function(xhr, status, error) {
+          console.error("Error:", error);
+        }
+      });
+    }
+
+  </script>
+  <script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery.magnific-popup.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/aos.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+  </body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Fusion Mart &mdash; Register User</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/icomoon/style.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/aos.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  </head>
+  <body>
+
+  <div class="site-wrap">
+
+
+    <div class="site-navbar bg-white py-2">
+
+      <div class="search-wrap">
+        <div class="container">
+          <a href="#" class="search-close js-search-close"><span class="icon-close2"></span></a>
+          <form action="#" method="post">
+            <input type="text" class="form-control" placeholder="Search keyword and hit enter...">
+          </form>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="logo">
+            <div class="site-logo">
+              <a href="{{ url_for('app.index') }}" class="js-logo-clone">Fusion Mart</a>
+            </div>
+          </div>
+          <div class="main-nav d-none d-lg-block">
+            <nav class="site-navigation text-right text-md-center" role="navigation">
+              <ul class="site-menu js-clone-nav d-none d-lg-block">
+                <li><a href="{{ url_for('app.index') }}">Home</a></li>
+                <li><a href="{{ url_for('app.items_filter') }}">Items</a></li>
+                <li class="has-children active">
+                  <a href="#">Login as</a>
+                  <ul class="dropdown">
+                    <li><a href="#">User</a></li>
+                    <li><a href="#">Admin</a></li>
+                  </ul>
+                </li>
+                <li><a href="{{ url_for('app.track_order') }}">Track Order</a></li>
+              </ul>
+            </nav>
+          </div>
+          <div class="icons">
+            <a href="#" class="icons-btn d-inline-block js-search-open"><span class="icon-search"></span></a>
+            <a href="#" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span class="icon-menu"></span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="custom-border-bottom py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0"><a href="index.html">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Register</strong></div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h2 class="h3 mb-3 text-black" align="center">Register</h2>
+          </div>
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+
+            <form action="/auth/sign_up/" method="post">
+
+              <div class="p-3 p-lg-5 border">
+                <div class="form-group row"><h5>Personal Details</h5></div>
+                <div class="form-group row">
+                  <div class="col-md-6">
+                    <label for="c_fname" class="text-black">First Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="c_fname" name="fname" placeholder="Enter your First Name">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="c_lname" class="text-black">Last Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="c_lname" name="lname" placeholder="Enter your Last Name">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-md-12">
+                    <label for="c_email" class="text-black">Email <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" id="c_email" name="username" placeholder="Enter your Email">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-md-12">
+                    <label for="c_password1" class="text-black">Password <span class="text-danger">*</span></label>
+                    <input type="password" class="form-control" id="c_password1" name="password" placeholder="Enter your Password">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-md-12">
+                    <label for="c_password2" class="text-black">Re-Enter Password <span class="text-danger">*</span></label>
+                    <input type="password" class="form-control" id="c_password2" name="password1" placeholder="Re-Enter your Password">
+                  </div>
+                </div>
+                <div class="form-group row">&nbsp;</div>
+                <div class="form-group row"><h5>Address Details</h5></div><div class="form-group row">
+                          <div class="col-md-12">
+                            <label for="a_addr_1" class="text-black">Address <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="a_addr_1" name="a_addr_1" placeholder="Street address">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <input type="text" class="form-control" placeholder="Apartment, suite, unit etc. (optional)" id="a_addr_2" name="a_addr_2">
+                        </div>
+
+                        <div class="form-group row">
+                          <div class="col-md-6">
+                            <label for="a_state" class="text-black">State <span class="text-danger">*</span></label>
+                            <select id="a_state" name="a_state" class="form-control">
+                              <option value="1">Select a state</option>
+                              <option value="Alabama">Alabama</option>
+                              <option value="Alaska">Alaska</option>
+                              <option value="Arizona">Arizona</option>
+                              <option value="Arkansas">Arkansas</option>
+                              <option value="California">California</option>
+                              <option value="Colorado">Colorado</option>
+                              <option value="Connecticut">Connecticut</option>
+                              <option value="Delaware">Delaware</option>
+                              <option value="Florida">Florida</option>
+                              <option value="Georgia">Georgia</option>
+                              <option value="Hawaii">Hawaii</option>
+                              <option value="Idaho">Idaho</option>
+                              <option value="Illinois">Illinois</option>
+                              <option value="Indiana">Indiana</option>
+                              <option value="Iowa">Iowa</option>
+                              <option value="Kansas">Kansas</option>
+                              <option value="Kentucky">Kentucky</option>
+                              <option value="Louisiana">Louisiana</option>
+                              <option value="Maine">Maine</option>
+                              <option value="Maryland">Maryland</option>
+                              <option value="Massachusetts">Massachusetts</option>
+                              <option value="Michigan">Michigan</option>
+                              <option value="Minnesota">Minnesota</option>
+                              <option value="Mississippi">Mississippi</option>
+                              <option value="Missouri">Missouri</option>
+                              <option value="Montana">Montana</option>
+                              <option value="Nebraska">Nebraska</option>
+                              <option value="Nevada">Nevada</option>
+                              <option value="New_Hampshire">New Hampshire</option>
+                              <option value="New_Jersey">New Jersey</option>
+                              <option value="New_Mexico">New Mexico</option>
+                              <option value="New_York">New York</option>
+                              <option value="North_Carolina">North Carolina</option>
+                              <option value="North_Dakota">North Dakota</option>
+                              <option value="Ohio">Ohio</option>
+                              <option value="Oklahoma">Oklahoma</option>
+                              <option value="Oregon">Oregon</option>
+                              <option value="Pennsylvania">Pennsylvania</option>
+                              <option value="Rhode_Island">Rhode Island</option>
+                              <option value="South_Carolina">South Carolina</option>
+                              <option value="South_Dakota">South Dakota</option>
+                              <option value="Tennessee">Tennessee</option>
+                              <option value="Texas">Texas</option>
+                              <option value="Utah">Utah</option>
+                              <option value="Vermont">Vermont</option>
+                              <option value="Virginia">Virginia</option>
+                              <option value="Washington">Washington</option>
+                              <option value="West_Virginia">West Virginia</option>
+                              <option value="Wisconsin">Wisconsin</option>
+                              <option value="Wyoming">Wyoming</option>
+                            </select>
+                          </div>
+                          <div class="col-md-6">
+                            <label for="a_zip" class="text-black">Postal / Zip Code <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="a_zip" name="a_zip" placeholder="Postal Code">
+                          </div>
+                        </div>
+
+                        <div class="form-group row mb-5">
+                          <div class="col-md-6">
+                            <label for="a_country" class="text-black">Country <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="a_country" name="a_country" placeholder="Country" value="USA" disabled>
+                          </div>
+                          <div class="col-md-6">
+                            <label for="a_phone" class="text-black">Phone <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="a_phone" name="a_phone" placeholder="Phone Number">
+                          </div>
+                        </div>
+                <div class="form-group row">&nbsp;</div>
+                <div class="form-group row"><h5>Credit Card Details</h5></div>
+                <div class="form-group row">
+                  <div class="col-md-6">
+                    <label for="cc_no" class="text-black">Credit Card No. <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="cc_no" name="cc_no" placeholder="XXXX-XXXX-XXXX-XXXX">
+                  </div>
+                  <div class="col-md-4">
+                    <label for="cc_val" class="text-black">Valid Till <span class="text-danger">*</span></label>
+                    <input type="month" class="form-control" id="cc_val" name="cc_val">
+                  </div>
+                  <div class="col-md-2">
+                    <label for="cc_cvv" class="text-black">CVV <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="cc_cvv" name="cc_cvv">
+                  </div>
+                </div>
+                <div class="form-group row">&nbsp;</div>
+                <div class="form-group row">
+                  <div class="col-lg-12">
+                    <input type="submit" class="btn btn-primary btn-lg btn-block" value="Create Account" placeholder="CVV">
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <footer class="site-footer custom-border-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+            <h3 class="footer-heading mb-4">Promo</h3>
+            <a href="#" class="block-6">
+              <img src="{{ url_for('static', filename='images/about_1.jpg') }}" alt="Image placeholder" class="img-fluid rounded mb-4">
+              <h3 class="font-weight-light  mb-0">Finding Your Perfect Shirts This Summer</h3>
+              <p>Promo from  July 15 &mdash; 25, 2019</p>
+            </a>
+          </div>
+          <div class="col-lg-5 ml-auto mb-5 mb-lg-0">
+            <div class="row">
+              <div class="col-md-12">
+                <h3 class="footer-heading mb-4">Quick Links</h3>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <ul class="list-unstyled">
+                  <li><a href="#">Sell online</a></li>
+                  <li><a href="#">Features</a></li>
+                  <li><a href="#">Shopping cart</a></li>
+                  <li><a href="#">Store builder</a></li>
+                </ul>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <ul class="list-unstyled">
+                  <li><a href="#">Mobile commerce</a></li>
+                  <li><a href="#">Dropshipping</a></li>
+                  <li><a href="#">Website development</a></li>
+                </ul>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <ul class="list-unstyled">
+                  <li><a href="#">Point of sale</a></li>
+                  <li><a href="#">Hardware</a></li>
+                  <li><a href="#">Software</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3">
+            <div class="block-5 mb-5">
+              <h3 class="footer-heading mb-4">Contact Info</h3>
+              <ul class="list-unstyled">
+                <li class="address">203 Fake St. Mountain View, San Francisco, California, USA</li>
+                <li class="phone"><a href="tel://23923929210">+2 392 3929 210</a></li>
+                <li class="email">emailaddress@domain.com</li>
+              </ul>
+            </div>
+
+            <div class="block-7">
+              <form action="#" method="post">
+                <label for="email_subscribe" class="footer-heading">Subscribe</label>
+                <div class="form-group">
+                  <input type="text" class="form-control py-4" id="email_subscribe" placeholder="Email">
+                  <input type="submit" class="btn btn-sm btn-primary" value="Send">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="row pt-5 mt-5 text-center">
+          <div class="col-md-12">
+            <p>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" class="text-primary">Colorlib</a>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery.magnific-popup.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/aos.js') }}"></script>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+  </body>
+</html>

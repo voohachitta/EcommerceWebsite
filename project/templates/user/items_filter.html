@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Fusion Mart &mdash; Login User</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/icomoon/style.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/aos.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style type="text/css">
+      input[type=number]::-webkit-inner-spin-button {
+          opacity: 1
+      }
+    </style>
+  </head>
+  <body>
+
+  <div class="site-wrap">
+
+
+    <div class="site-navbar bg-white py-2">
+
+      <div class="search-wrap">
+        <div class="container">
+          <a href="#" class="search-close js-search-close"><span class="icon-close2"></span></a>
+          <form action="#" method="post">
+            <input type="text" class="form-control" placeholder="Search keyword and hit enter...">
+          </form>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="logo">
+            <div class="site-logo">
+              <a href="{{ url_for('app.index') }}" class="js-logo-clone">Fusion Mart</a>
+            </div>
+          </div>
+          <div class="main-nav d-none d-lg-block">
+            <nav class="site-navigation text-right text-md-center" role="navigation">
+              <ul class="site-menu js-clone-nav d-none d-lg-block">
+                <li><a href="{{ url_for('app.index') }}">Home</a></li>
+
+                <li class="active">
+                  <a href="{{ url_for('app.items_filter') }}">Items</a>
+                </li>
+                {% if(user.is_authenticated) %}
+                <li class="">
+                  <a href="{{ url_for('app.my_orders') }}">My Orders</a>
+                </li>
+                {% if(user.isUser) %}<li class="">
+                  <a href="{{ url_for('app.profile') }}">My Profile</a>
+                </li> {% endif %}
+                {% else %}
+                <li class=""><a href="contact.html">Contact</a></li>
+                <li class="has-children active">
+                  <a href="#">Login as</a>
+                  <ul class="dropdown">
+                    <li><a href="{{ url_for('auth.login') }}">User</a></li>
+                    <li><a href="{{ url_for('auth.login') }}">Admin</a></li>
+                  </ul>
+                </li>
+                {% endif %}
+              </ul>
+            </nav>
+          </div>
+
+          <div class="icons">
+            <a href="#" class="icons-btn d-inline-block js-search-open"><span class="icon-search"></span></a>
+            {% if(user.is_authenticated) %}
+              <a href="{{ url_for('app.cart') }}" class="icons-btn d-inline-block bag">
+                <span class="icon-shopping-cart"></span>
+                <span class="number">{{ cart_items }}</span>
+              </a>
+              <a href="{{ url_for('auth.logout') }}" class="icons-btn d-inline-block sign-out">
+                <span class="icon-sign-out"></span>
+              </a>
+            {% endif %}
+            <a href="{{ url_for('auth.logout') }}" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span class="icon-menu"></span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="custom-border-bottom py-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 mb-0">Home</div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="site-section">
+      <div class="container">
+
+        <div class="row mb-5">
+          <div class="col-md-9 order-1">
+
+            <div class="row align">
+              <div class="col-md-12 mb-5">
+                <div class="float-md-left"><h2 class="text-black h5">Shop All</h2></div>
+                <div class="d-flex">
+                </div>
+              </div>
+            </div>
+            <div class="row mb-5">
+              <input type="hidden" value="{{ items | length }}" id="item_length" />
+              {% for item in items %}
+                <div class="col-lg-4 col-md-2 item-entry mb-3" id="i_{{ loop.index }}" data-name="name_{{ item.id }}">
+                  <a href="#" class="product-item sm-height d-block">
+                    <img src="{{ item.url }}" alt="Image" style="height: 100%">
+                  </a>
+                  <input type="hidden" value="{{ item.id }}" name="i_{{ loop.index }}" />
+                  <h2 class="item-title"><a href="/item/{{ item.id }}/">{{ item.name }}</a></h2>
+                  <strong class="item-price" id="ip_{{ loop.index }}">$ {{ item.price }}</strong>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="col-md-3 order-2 mb-5 mb-md-0">
+            <h5 align="center">Filter Items</h5>
+            <div class="border p-4 rounded mb-4">
+              <div class="mb-4">
+                <h3 class="mb-3 h6 text-uppercase text-black d-block">Filter by Price</h3>
+                <div id="slider-range" class="border-primary" ></div>
+                <input type="text" name="text" id="amount" class="form-control border-0 pl-0 bg-white" disabled />
+              </div>
+
+              <div class="mb-4">
+                <h3 class="mb-3 h6 text-uppercase text-black d-block">Brand / Category</h3>
+                {% for department in departments %}
+                  {% for category in department.categories %}
+                    <label for="cat_{{category.id}}" class="d-flex">
+                      <input type="checkbox" id="cat_{{category.id}}" class="mr-2 mt-1" onclick="getIds({{category.id}})" checked> <span class="text-black">{{ category.name }}</span>
+                    </label>
+                  {% endfor %}
+                {% endfor %}
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer custom-border-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
+            <h3 class="footer-heading mb-4">Promo</h3>
+            <a href="#" class="block-6">
+              <img src="{{ url_for('static', filename='images/about_1.jpg') }}" alt="Image placeholder" class="img-fluid rounded mb-4">
+              <h3 class="font-weight-light  mb-0">Finding Your Perfect Products This Season</h3>
+            </a>
+          </div>
+          <div class="col-lg-5 ml-auto mb-5 mb-lg-0">
+            <div class="row">
+              <div class="col-md-12">
+                <h3 class="footer-heading mb-4">Quick Links</h3>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <ul class="list-unstyled">
+                  <li><a href="#">Home</a></li>
+                  <li><a href="#">Items</a></li>
+                  {% if(user.is_authenticated) %}
+                  <li><a href="#">My Orders</a></li>
+                  {% else %}
+                  <li><a href="#">Login</a></li>
+                  {% endif %}
+                </ul>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <ul class="list-unstyled">
+                  {% if(user.is_authenticated) %}
+                  <li><a href="#">My Orders</a></li>
+                  <li><a href="#">My Profile</a></li>
+                  <li><a href="#">Shopping Cart</a></li>
+                  {% else %}
+                  <li><a href="#">Register</a></li>
+                  <li><a href="#">Track Order</a></li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3">
+            <div class="block-5 mb-5">
+              <h3 class="footer-heading mb-4">Contact Info</h3>
+              <ul class="list-unstyled">
+                <li class="address">203 Fake St. Mountain View, San Francisco, California, USA</li>
+                <li class="phone"><a href="tel://23923929210">+2 392 3929 210</a></li>
+                <li class="email">customercare@fusionmart.com</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="row pt-5 mt-5 text-center">
+          <div class="col-md-12">
+            <p>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | <a href="http://localhost:5000/" target="_blank" class="text-primary">Fusion Mart</a>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+  <script type="text/javascript">
+    $("#slider-range").on('click load change', function filter() {
+      v1 = parseFloat($("#amount").val().replaceAll("$", "").split("-")[0].trim());
+      v2 = parseFloat($("#amount").val().replaceAll("$", "").split("-")[1].trim());
+      for(i = 1; i <= parseInt($('#item_length').val()); i++) {
+          price = parseFloat($('#ip_' + i).html().replace('$ ', ""));
+          if(price > v1 && price < v2) {
+            $('#i_' + i).css("display", 'block');
+          } else {
+            $('#i_' + i).css("display", 'none');
+          }
+      }
+    });
+
+    function getIds(categoryId) {
+      $.post({
+        url: "/itemsByCategory/" + categoryId + "/",
+        contentType: "application/json",
+        success: function(response) {
+          console.log("Success:", response);
+          if(response["status"] == "true") {
+            if(document.getElementById("cat_" + categoryId).checked) {
+              for(i = 0; i < response["item_ids"].length; i ++) {
+                document.querySelector('[data-name="' + "name_" + response["item_ids"][i] + '"]').style.display = "block";
+              }
+            } else {
+              for(i = 0; i < response["item_ids"].length; i ++) {
+                document.querySelector('[data-name="' + "name_" + response["item_ids"][i] + '"]').style.display = "none";
+              }
+            }
+          } else {
+            alert("Failed !");
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error("Error:", error);
+        }
+      });
+    }
+  </script>
+  <script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/owl.carousel.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery.magnific-popup.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/aos.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+  </body>
+</html>
