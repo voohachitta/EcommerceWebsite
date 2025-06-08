@@ -1,10 +1,15 @@
 Ecommerce Website (Departmental Store) with mentioned features.
 
 Technologies and Tools Used
+
 Front End:	HTML, CSS, BOOTSTRAP, JAVA SCRIPT
+
 Backend:	PYTHON, FLASK
+
 Database:	SQLITE3
+
 Python Modules:	FLASK, SQL ALCHEMY, SQLITE3
+
 Tools:		PYCHARM, MySQL community server, Postman, DB Visualizer
 
 
